@@ -2,22 +2,39 @@ import type { CollectionConfig } from "payload";
 
 export const Categories: CollectionConfig = {
   slug: "categories",
-  admin: {
-    useAsTitle: "name",
-  },
-  auth: false,
+  // admin: {
+  //   useAsTitle: "name",
+  // },
+  // auth: false,
   fields: [
     {
       name: "name",
       type: "text",
       required: true,
-      label: "Category Name",
     },
     {
-      name: "description",
-      type: "textarea",
-      label: "Description",
+      name: "slug",
+      type: "text",
+      required: true,
+      unique: true,
+      index: true,
     },
-    // Add more fields as needed
+    {
+      name: "color",
+      type: "text",
+    },
+    {
+      name: "parent",
+      type: "relationship",
+      relationTo: "categories",
+      hasMany: false,
+    },
+    {
+      name: "subcategories",
+      type: "join",
+      collection: "categories",
+      on: "parent",
+      hasMany: true,
+    },
   ],
 };
