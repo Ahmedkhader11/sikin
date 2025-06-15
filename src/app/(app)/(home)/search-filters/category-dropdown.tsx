@@ -1,27 +1,28 @@
 "use client";
-import { Category } from "@/payload-types";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useRef, useState } from "react";
 import { useDropdownPosition } from "./use-dropdown-position";
 import { SubcategoryMenu } from "./subcategory-menu";
+import { CustomCategory } from "../types";
+import Link from "next/link";
 
 interface Props {
-  category: Category;
+  category: CustomCategory;
   isActive?: boolean;
-  isNavigationHoevered?: boolean;
+  isNavigationHovered?: boolean;
 }
 
 export const CategoryDropDown = ({
   category,
   isActive,
-  isNavigationHoevered,
+  isNavigationHovered,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { getDropdownPosition } = useDropdownPosition(dropdownRef);
 
-  //   console.log(category);
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
   };
@@ -38,12 +39,20 @@ export const CategoryDropDown = ({
         <Button
           variant="elevated"
           className={cn(
-            "h-11 px-4 bg-transparent border-transparent rounded-full hover:bg-white hover:border-primary text-black",
-            isActive && !isNavigationHoevered && "bg-white border-primary"
+            "h-11 px-4 bg-transparent border-transparent rounded-xl hover:bg-white hover:border-primary text-black",
+            isActive && !isNavigationHovered && "bg-white border-primary ",
+            isOpen &&
+              "bg-white border-primary rounded-lg shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] -translate-x-[1.5px] -translate-y-[1.5px] "
           )}
         >
-          {category.name}
+          <Link
+            href={`/${category.slug === "all" ? "" : category.slug}`}
+            className="flex items-center"
+          >
+            {category.name}
+          </Link>
         </Button>
+        {/* Pointer */}
         {category.subcategories && category.subcategories.length > 0 && (
           <div
             className={cn(
